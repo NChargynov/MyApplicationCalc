@@ -28,6 +28,7 @@ public class MainActivityLauncher extends AppCompatActivity {
         calculator1 = findViewById(R.id.btn_calculator1);
         calculator2 = findViewById(R.id.btn_calculator2);
         share = findViewById(R.id.btn_share);
+        
 
         Intent intent = getIntent();
         if (intent != null) {

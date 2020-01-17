@@ -108,7 +108,7 @@ public class SecondActivity extends AppCompatActivity {
 
     public void onClickEqual(View view){
         numbersList.add(Integer.valueOf(numbers));
-        Intent intent = new Intent(this, MainActivityLauncher.class);
+        Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("numbersList", numbersList);
         intent.putExtra("operationsList", operationsList);
         startActivity(intent);

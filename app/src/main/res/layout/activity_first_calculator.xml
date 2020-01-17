@@ -4,13 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SecondActivity">
+    tools:context=".FirstCalculator">
+
+    <Button
+        android:id="@+id/btn_divide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="40sp"
+        android:text="/"
+        android:onClick="onOperationClick"
+        app:layout_constraintLeft_toRightOf="@+id/btn_nine"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_nine"
+        app:layout_constraintTop_toTopOf="@+id/btn_nine"
+        />
 
     <TextView
-        android:id="@+id/resultTV2"
+        android:id="@+id/resultTV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="50sp"
+        android:hint="Введите числа"
         android:freezesText="true"
         app:layout_constraintBottom_toTopOf="@+id/btn_clear"
         android:layout_marginBottom="40dp"/>
@@ -137,14 +150,47 @@
         />
     <Button
         android:text="@string/equal"
-        android:id="@+id/btn_equal3"
+        android:id="@+id/btn_equal"
         android:textSize="40sp"
-        android:onClick="onClickEqual"
+        android:onClick="onOperationClick"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toRightOf="@+id/btn_zero"
         app:layout_constraintBottom_toBottomOf="@+id/btn_zero"
         app:layout_constraintTop_toTopOf="@+id/btn_zero"
+        />
+    <Button
+        android:id="@+id/btn_addition"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/addition"
+        android:textSize="40sp"
+        android:onClick="onOperationClick"
+        app:layout_constraintLeft_toRightOf="@+id/btn_six"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_six"
+        app:layout_constraintTop_toTopOf="@+id/btn_six"
+        />
+    <Button
+        android:id="@+id/btn_subtraction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/subtraction"
+        android:textSize="40sp"
+        android:onClick="onOperationClick"
+        app:layout_constraintLeft_toRightOf="@+id/btn_equal"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_equal"
+        app:layout_constraintTop_toTopOf="@+id/btn_equal"
+        />
+    <Button
+        android:text="@string/multiply"
+        android:id="@+id/btn_multiply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="40sp"
+        android:onClick="onOperationClick"
+        app:layout_constraintLeft_toRightOf="@+id/btn_three"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_two"
+        app:layout_constraintTop_toTopOf="@+id/btn_two"
         />
 
     <Button
@@ -159,16 +205,27 @@
         app:layout_constraintRight_toRightOf="@+id/btn_seven"
         />
 
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Далее"
+        android:text="@string/percent"
         android:textSize="40sp"
-        android:onClick="onStartThirdActivityClick"
+        android:onClick="onOperationClick"
+        android:id="@+id/btn_percent"
+        app:layout_constraintBottom_toTopOf="@+id/btn_eight"
+        app:layout_constraintLeft_toLeftOf="@+id/btn_eight"
+        app:layout_constraintRight_toRightOf="@+id/btn_eight"
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:textSize="40sp"
+        android:onClick="onClickSave"
         android:id="@+id/btn_next_activity"
         app:layout_constraintBottom_toTopOf="@+id/btn_nine"
-        app:layout_constraintLeft_toRightOf="@+id/btn_clear" />
+        app:layout_constraintLeft_toRightOf="@+id/btn_percent"
+        />
 
 
 

@@ -1,6 +1,9 @@
 package com.example.myapplication;
-import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,188 +11,108 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
-    Button zero, one, two, three, four, five, six, seven, eight, nine, subtraction, addition,
-            divide, multiply, equal, dot;
-
-    TextView textView;
-
-    String rawOperand = "";
-    Double firstOperand;
-    Double secondOperand;
-    String operation;
-    Double result;
+    TextView textView1, textView2;
+    Button calculator1, calculator2, share, changeFragmentsbtn;
+    static private final int ID_FOR_SECOND = 1;
+    static private final String KEY_FOR_MAIN_LAUNCHER = "KEY_FOR_MAIN_LAUNCHER";
+    static final String TEXT_KEY = "key";
+    RecyclerFragments recyclerFragments;
+    boolean isButtonFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-            zero = findViewById(R.id.btn_zero);
-            one = findViewById(R.id.btn_one);
-            two = findViewById(R.id.btn_two);
-            three = findViewById(R.id.btn_three);
-            four = findViewById(R.id.btn_four);
-            five = findViewById(R.id.btn_five);
-            six = findViewById(R.id.btn_six);
-            seven = findViewById(R.id.btn_seven);
-            eight = findViewById(R.id.btn_eight);
-            nine = findViewById(R.id.btn_nine);
-            subtraction = findViewById(R.id.btn_subtraction);
-            addition = findViewById(R.id.btn_addition);
-            divide = findViewById(R.id.btn_divide);
-            multiply = findViewById(R.id.btn_multiply);
-            equal = findViewById(R.id.btn_equal);
-            dot = findViewById(R.id.btn_dot);
-            textView = findViewById(R.id.resultTV);
+        textView1 = findViewById(R.id.text_view1);
+        calculator1 = findViewById(R.id.btn_calculator1);
+        calculator2 = findViewById(R.id.btn_calculator2);
+        share = findViewById(R.id.btn_share);
+        changeFragmentsbtn = findViewById(R.id.btn_change_fragments);
+        textView2 = findViewById(R.id.resultTV_for_fragments);
 
-            if (savedInstanceState != null) {
-                firstOperand = savedInstanceState.getDouble("first");
-                secondOperand = savedInstanceState.getDouble("second");
-                operation = savedInstanceState.getString("oper");
-                rawOperand = savedInstanceState.getString("rawOper");
-                result = savedInstanceState.getDouble("result");
-            }
 
         Intent intent = getIntent();
         if (intent != null) {
-            String text = intent.getStringExtra(SecondActivity.TEXT_KEY);
-            textView.setText(text);
+            ArrayList<Integer> numbersList = intent.getIntegerArrayListExtra("numbersList");
+            ArrayList<String> operationsList = intent.getStringArrayListExtra("operationsList");
+
+            if (numbersList != null) {
+                Integer result = numbersList.get(0);
+                for (int i = 0; i < numbersList.size() - 1; i++) {
+
+                    switch (operationsList.get(i)) {
+                        case "+":
+                            result += numbersList.get(i + 1);
+                            break;
+                        case "-":
+                            result -= numbersList.get(i + 1);
+                            break;
+                    }
+                }
+                textView1.setText(PrettyResult.convert(numbersList, operationsList) + "=" + result.toString());
+            }
+        } else {
+
         }
+
+        recyclerFragments = new RecyclerFragments();
+        changeFragment(recyclerFragments);
+        isButtonFragment = true;
+    }
+
+    public void onStartSecondActivityClick(View v) {
+        String text = textView1.getText().toString();
+        Intent intent = new Intent(this, SecondActivity.class);
+        intent.putExtra(MainActivity.TEXT_KEY, text);
+        startActivity(intent);
+    }
+
+    public void onOpenFirstCalculator(View v) {
+        Intent intent = new Intent(this, FirstCalculator.class);
+        startActivityForResult(intent, 1);
     }
 
     @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if (firstOperand != null){
-            outState.putDouble("first", firstOperand);
-        } if (secondOperand != null){
-            outState.putDouble("second", secondOperand);
-        } if (rawOperand != null){
-            outState.putString("rawOper", rawOperand);
-        } if (operation != null){
-            outState.putString("oper", operation);
-        } if (result != null ){
-            outState.putDouble("result", result);
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ID_FOR_SECOND && resultCode == RESULT_OK) {
+            String s = data.getStringExtra(KEY_FOR_MAIN_LAUNCHER);
+            textView1.setText(s);
+        } else {
         }
     }
 
-    public void onNumberClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_zero:
-                enterNumber("0");
-                break;
-            case R.id.btn_one:
-                enterNumber("1");
-                break;
-            case R.id.btn_two:
-                enterNumber("2");
-                break;
-            case R.id.btn_three:
-                enterNumber("3");
-                break;
-            case R.id.btn_four:
-                enterNumber("4");
-                break;
-            case R.id.btn_five:
-                enterNumber("5");
-                break;
-            case R.id.btn_six:
-                enterNumber("6");
-                break;
-            case R.id.btn_seven:
-                enterNumber("7");
-                break;
-            case R.id.btn_eight:
-                enterNumber("8");
-                break;
-            case R.id.btn_nine:
-                enterNumber("9");
-                break;
-            case R.id.btn_dot:
-                enterNumber(".");
-                break;
-            case R.id.btn_clear:
-                textView.setText("");
-                rawOperand = "";
-                firstOperand = null;
-                secondOperand = null;
-                break;
-            default:
-                break;
-
-        }
-    }
-
-    public void onClickSave(View v){
+    public void onClickShare(View view) {
         Intent intent = new Intent();
-        intent.putExtra("KEY_FOR_MAIN_LAUNCHER", textView.getText().toString());
-        setResult(RESULT_OK, intent);
-        finish();
+        intent.setAction(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_TEXT, textView1.getText());
+        intent.setType("text/plain");
+        startActivity(intent);
     }
 
-    public void enterNumber(String number) {
-        textView.append(number);
-        rawOperand += number;
-    }
-
-    public void onOperationClick(View v) {
-        try {
-            if (firstOperand == null) {
-                firstOperand = Double.parseDouble(rawOperand);
-            } else {
-                secondOperand = Double.parseDouble(rawOperand);
-            }
-            rawOperand = "";
-        } catch (Exception e) {
-            e.printStackTrace();
+    public void onClickFragments(View view) {
+        if (isButtonFragment) {
+            changeFragment(new BlankFragment());
+            isButtonFragment = false;
+        } else {
+            changeFragment(recyclerFragments);
+            isButtonFragment = true;
         }
-
-        switch (v.getId()) {
-            case R.id.btn_addition:
-                enterOperation("+");
-                break;
-            case R.id.btn_multiply:
-                enterOperation("*");
-                break;
-            case R.id.btn_divide:
-                enterOperation("/");
-                break;
-            case R.id.btn_subtraction:
-                enterOperation("-");
-                break;
-            case R.id.btn_equal:
-                if (operation != null) {
-                    switch (operation) {
-                        case "+":
-                            result = firstOperand + secondOperand;
-                            textView.append("=" + result);
-                            break;
-                        case "*":
-                            result = firstOperand * secondOperand;
-                            textView.append("=" + result);
-                            break;
-                        case "/":
-                            result = firstOperand / secondOperand;
-                            textView.append("=" + result);
-                            break;
-                        case "-":
-                            result = firstOperand - secondOperand;
-                            textView.append("=" + result);
-                            break;
-                            default:
-                                break;
-                    }
-                }
-            default:
-                break;
-        }
-
     }
 
-    public void enterOperation(String operation) {
-        textView.append(operation);
-        this.operation = operation;
+    public void inputText(String s) {
+        recyclerFragments.addResult(s);
+    }
+
+    public void changeFragment(Fragment fragment) {
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.container, fragment);
+        transaction.commit();
     }
 }

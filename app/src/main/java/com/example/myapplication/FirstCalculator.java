@@ -2,6 +2,8 @@ package com.example.myapplication;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,6 +23,8 @@ public class FirstCalculator extends AppCompatActivity {
     Double secondOperand;
     String operation;
     Double result;
+    MainAdapter adapter;
+    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +48,13 @@ public class FirstCalculator extends AppCompatActivity {
         equal = findViewById(R.id.btn_equal);
         dot = findViewById(R.id.btn_dot);
         textView = findViewById(R.id.resultTV);
+
+        adapter= new MainAdapter();
+
+        recyclerView = findViewById(R.id.recycler_view_first_calculator);
+        recyclerView.setAdapter(adapter);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
 
         if (savedInstanceState != null) {
             firstOperand = savedInstanceState.getDouble("first");
@@ -166,18 +177,22 @@ public class FirstCalculator extends AppCompatActivity {
                         case "+":
                             result = firstOperand + secondOperand;
                             textView.append("=" + result);
+                            getValueForArrayListFirstCalculator(firstOperand.toString() + " + " + secondOperand.toString()+ " = " + result.toString());
                             break;
                         case "*":
                             result = firstOperand * secondOperand;
                             textView.append("=" + result);
+                            getValueForArrayListFirstCalculator(firstOperand.toString() + " * " + secondOperand.toString()+ " = " + result.toString());
                             break;
                         case "/":
                             result = firstOperand / secondOperand;
                             textView.append("=" + result);
+                            getValueForArrayListFirstCalculator(firstOperand.toString() + " / " + secondOperand.toString()+ " = " + result.toString());
                             break;
                         case "-":
                             result = firstOperand - secondOperand;
                             textView.append("=" + result);
+                            getValueForArrayListFirstCalculator(firstOperand.toString() + " - " + secondOperand.toString()+ " = " + result.toString());
                             break;
                         default:
                             break;
@@ -193,4 +208,12 @@ public class FirstCalculator extends AppCompatActivity {
         textView.append(operation);
         this.operation = operation;
     }
+    public void addResultFirstCalcutor(String s){
+        adapter.addString(s);
+    }
+
+    public void getValueForArrayListFirstCalculator(String value){
+        addResultFirstCalcutor(value);
+    }
+
 }
